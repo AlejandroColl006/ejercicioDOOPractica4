@@ -23,4 +23,7 @@ public abstract class ArticuloElectronico implements Mostrable {
     public Marca getMarca() {
         return marca;
     }
+    @Override
+    public abstract void mostrar();
 }
+
