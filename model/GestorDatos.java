@@ -8,42 +8,75 @@ public class GestorDatos {
     private ArrayList<Marca> marcas = new ArrayList<>();
     private ArrayList<ArticuloElectronico> articulos = new ArrayList<>();
 
-    public void añadirMarca(Marca m) {
+    // ----------- AGREGAR -----------
+
+    public void agregarMarca(Marca m) {
         marcas.add(m);
     }
 
-    public Marca buscarMarca(String nombre, String pais) {
+    public void agregarTelevisor(Televisor t) {
+        if (!marcas.contains(t.getMarca()))
+            throw new IllegalArgumentException("La marca no existe");
+
+        articulos.add(t);
+    }
+
+    public void agregarMovil(Movil m) {
+        if (!marcas.contains(m.getMarca()))
+            throw new IllegalArgumentException("La marca no existe");
+
+        articulos.add(m);
+    }
+
+    // ----------- BUSCAR -----------
+
+    public Marca buscarMarca(String nombre) {
         for (Marca m : marcas) {
-            if (m.getNombre().equalsIgnoreCase(nombre)
-                    && m.getPais().equalsIgnoreCase(pais)) {
+            if (m.getNombre().equalsIgnoreCase(nombre))
                 return m;
-            }
         }
         return null;
     }
 
-    public void añadirArticulo(ArticuloElectronico art) {
-        articulos.add(art);
+    public Televisor buscarTelevisor(String nombre) {
+        for (ArticuloElectronico a : articulos) {
+            if (a instanceof Televisor && a.getNombre().equalsIgnoreCase(nombre))
+                return (Televisor) a;
+        }
+        return null;
     }
 
-    public ArrayList<Marca> getMarcasOrdenadas() {
-        ArrayList<Marca> ordenadas = new ArrayList<>(marcas);
-        Collections.sort(ordenadas);
-        return ordenadas;
+    public Movil buscarMovil(String nombre) {
+        for (ArticuloElectronico a : articulos) {
+            if (a instanceof Movil && a.getNombre().equalsIgnoreCase(nombre))
+                return (Movil) a;
+        }
+        return null;
     }
 
-    public ArrayList<ArticuloElectronico> getArticulosOrdenados() {
-        ArrayList<ArticuloElectronico> ordenados = new ArrayList<>(articulos);
-        ordenados.sort((a, b) -> {
-            int c1 = a.getMarca().getNombre().compareToIgnoreCase(b.getMarca().getNombre());
-            if (c1 != 0) return c1;
+    // ----------- MOSTRAR -----------
 
-            int c2 = Double.compare(a.getPrecio(), b.getPrecio());
-            if (c2 != 0) return c2;
+    public void mostrarMarcas() {
+        Collections.sort(marcas);
+        for (Marca m : marcas) {
+            System.out.println(m);
+        }
+    }
 
-            return a.getNombre().compareToIgnoreCase(b.getNombre());
+    public void mostrarArticulos() {
+        articulos.sort((a, b) -> {
+            int cmpMarca = a.getMarca().getNombre().compareTo(b.getMarca().getNombre());
+            if (cmpMarca != 0) return cmpMarca;
+
+            int cmpPrecio = Double.compare(a.getPrecio(), b.getPrecio());
+            if (cmpPrecio != 0) return cmpPrecio;
+
+            return a.getNombre().compareTo(b.getNombre());
         });
-        return ordenados;
+
+        for (ArticuloElectronico a : articulos) {
+            a.mostrar();
+        }
     }
 }
 
